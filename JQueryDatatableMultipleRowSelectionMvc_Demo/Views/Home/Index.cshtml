@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<h3 class="text-center text-uppercase">List of employees</h3>
+<button id="button" class="btn btn-primary rounded-0 mb-2">Row Count</button>
+<table id="example" class="table table-bordered" style="width:100%;">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start Date</th>
+            <th>Salary</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                //for single row selection use this
+
+                //select: {
+                //    style: 'single'
+                //},
+
+                "ajax": {
+                    "url": '/Home/GetData',
+                    "type": 'GET',
+                    "dataType": 'json',
+                },
+                "columns": [
+                    { 'data': 'Id' },
+                    { 'data': 'Name' },
+                    { 'data': 'Position' },
+                    { 'data': 'Office' },
+                    { 'data': 'Age' },
+                    {
+                        'data': 'StartDate',
+                        'render': function (jsonDate) {
+                            var date = new Date(parseInt(jsonDate.substr(6)));
+                            var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                            return ("0" + date.getDate()).slice(-2) + '-' + month + '-' + date.getFullYear();
+                        }
+                    },
+                    {
+                        'data': 'Salary',
+                        'render': function (salary) {
+                            return '$' + salary;
+                        }
+                    }
+                ],
+            });
+            $('#example tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+
+            $('#button').click(function () {
+                alert(table.rows('.selected').data().length + ' row(s) selected');
+            });
+        });
+    </script>
+}
