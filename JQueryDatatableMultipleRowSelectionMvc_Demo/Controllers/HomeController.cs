@@ -17,10 +17,5 @@ namespace JQueryDatatableCopyExcelPdfCSVPrintButtonMvc_Demo.Controllers
             var employee = db.Employees.ToList();
             return Json(new { data = employee }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult MultipleRowSelection()
-        {
-            return View();
-        }
     }
 }
